@@ -60,7 +60,33 @@ print(violent["year"].value_counts().sort_index())
 print(violent["OFFENSES"].value_counts().head(20))
 
 
+
+
 clean = violent[["INCIDENTNEIGHBORHOOD", "year","OFFENSES"]].copy()
+
+
+# map used to repmap diffreing neighbood names
+NAME_MAP = {
+    # crime name                        pop naem
+    "Arlington":                        "Arlington - Arlington Heights (Combined)",
+    "Arlington Heights":                "Arlington - Arlington Heights (Combined)",
+    "Central Business District":        "Central Business District (Downtown)",
+    "Golden Triangle/Civic Arena":      "Central Business District (Downtown)",
+    "Mount Oliver":                     "Mt. Oliver",
+    "Mt. Oliver Neighborhood":          "Mt. Oliver",
+    "Spring Hill-City View":            "Spring Hill-City",
+    "Central North Side":               "Central Northside",
+    "Troy Hill-Herrs Island":           "Troy Hill",
+}
+
+DROP = ["Outside City", "Outside County", "Outside State",
+        "Mt. Oliver Boro"]   # Boro = separate municipalit
+
+clean["INCIDENTNEIGHBORHOOD"] = clean["INCIDENTNEIGHBORHOOD"].replace(NAME_MAP)
+
+before = len(clean)
+clean = clean[~clean["INCIDENTNEIGHBORHOOD"].isin(DROP)]
+print("dropped:", before - len(clean))
 
 clean.to_csv("data/clean/crime_2016-2022.csv", index=False)
 con = sqlite3.connect("project.db")
