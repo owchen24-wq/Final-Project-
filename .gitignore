@@ -8,4 +8,6 @@ data/clean/
 *.sqlite
 .env
 .idea/
-.Rproj.user
+.Rproj.user/
+.Rhistory
+.RData
