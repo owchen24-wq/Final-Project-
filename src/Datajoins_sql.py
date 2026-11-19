@@ -61,9 +61,10 @@ GROUP BY p.Neighborhood, p."2020_Total_Population"
 
 
 result1 =  pd.read_sql(query2, con)
+result1 .to_csv("data/clean/final_data.csv", index=False)
 
-
-print(  result1 )
+result1.to_sql("final_data", con, if_exists="replace", index=False)
+con.close()
 
 
 
